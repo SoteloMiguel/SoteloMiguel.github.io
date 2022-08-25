@@ -1,30 +1,35 @@
+/**
+ *  Declaro las arreglos globales
+ */
 var arrLlaves = ["ai", "enter", "imes", "ober", "ufat"];
 var arrLlaves2 = ["a", "e", "i", "o", "u"];
 var arrCadena = [];
-
-var boxSalida = document.getElementById("box-salida");
-var cadenaSalida = document.getElementById("texto-salida");
+/**
+  * enlazo los elementos html a utilizar
+  * las declaro como constantes
+  */
+const cadenaEntrada = document.getElementById("texto-entrada");
+const boxSalida = document.getElementById("box-salida");
+const cadenaSalida = document.getElementById("texto-salida");
+const tipoOperacion = document.getElementById("tipo-operacion");
+const botones = document.querySelectorAll("button");
+ // oculto el textaarea de salida
 cadenaSalida.style.visibility = "hidden";
+ //pongo el foco en el textarea de entrada
 document.getElementById("texto-entrada").focus();
 
-var tipoOperacion = document.getElementById("tipo-operacion");
-var botones = document.querySelectorAll("button");
-
 function encriptar() {
-  var cadenaEntrada = document.getElementById("texto-entrada").value.toLowerCase();
+  cadenaEntrada.value.toLowerCase();
 
-  if (cadenaEntrada == 0 || cadenaEntrada.length == 0) {
+  if (cadenaEntrada.value == "" || cadenaEntrada.value.length == 0) {
     alert("Debe ingresar un texto");
-
   } else {
-    var arrCadena = cadenaEntrada.split("");
+    var arrCadena = cadenaEntrada.value.split("");
 
     arrCadena.forEach((caracter, index) => {
-      (caracter == "a") ? arrCadena[index] = arrLlaves[0]: (caracter == "e") ? arrCadena[index] = arrLlaves[1] :
-        (caracter == "i") ? arrCadena[index] = arrLlaves[2] :
-        (caracter == "o") ? arrCadena[index] = arrLlaves[3] :
-        (caracter == "u") ? arrCadena[index] = arrLlaves[4] :
-        0;
+      arrLlaves2.forEach((elemento, i) => {
+        if (elemento == caracter) arrCadena[index] = arrLlaves[i];
+      });
     });
 
     if (botones[3].disabled) activarBotones();
@@ -35,36 +40,35 @@ function encriptar() {
 };
 
 function desencriptar() {
-  var cadenaEntrada = document.getElementById("texto-entrada").value.toLowerCase();
   var regx;
-  if (cadenaEntrada == 0 || cadenaEntrada.length == 0) {
+  if (cadenaEntrada.value == "" || cadenaEntrada.value.length == 0) {
     alert("Debe ingresar un texto");
-
   } else {
     arrLlaves.forEach((elemento, indice) => {
-      regx = RegExp(elemento, 'gm');
-      cadenaEntrada = cadenaEntrada.replace(regx, arrLlaves2[indice]);
+      regx = new RegExp(elemento, "gm");
+      cadenaEntrada.value = cadenaEntrada.value.replace(regx, arrLlaves2[indice]);
     });
     animacion("Texto Desencriptado");
     if (botones[3].disabled) activarBotones();
-    cadenaSalida.value = cadenaEntrada;
+    cadenaSalida.value = cadenaEntrada.value;
   }
 };
 
 function copiar() {
-  console.log("copiando");
-  cadenaSalida = document.getElementById("texto-salida");
+  cadenaEntrada.value = "";
   cadenaSalida.select();
-  document.execCommand("copy");
+  navigator.clipboard.writeText(cadenaSalida.value);
+  cadenaEntrada.focus();
+  alert("Texto copiado!");
 };
 
 function limpiar() {
   tipoOperacion.innerHTML = "Resultado";
-  document.getElementById("texto-entrada").value = "";
   cadenaSalida.value = "";
   cadenaSalida.style.visibility = "hidden";
   activarBotones();
-  document.getElementById("texto-entrada").focus();
+  cadenaEntrada.value = "";
+  cadenaEntrada.focus();
 };
 
 function activarBotones() {
@@ -83,5 +87,5 @@ function animacion(text) {
     boxSalida.style.backgroundSize = "cover";
     tipoOperacion.innerHTML = text;
     cadenaSalida.style.visibility = "visible";
-  }, 2000);
-}
+  }, 1500);
+};
