@@ -44,7 +44,7 @@ function desencriptar() {
   if (cadenaEntrada.value == "" || cadenaEntrada.value.length == 0) {
     alert("Debe ingresar un texto");
   } else {
-   cadenaSalida.value = cadenaEntrada.value;
+    cadenaSalida.value = cadenaEntrada.value;
     arrLlaves.forEach((elemento, indice) => {
       regx = new RegExp(elemento, "gm");
       cadenaSalida.value = cadenaSalida.value.replace(regx, arrLlaves2[indice]);
